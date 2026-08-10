@@ -27,3 +27,23 @@ LEFT JOIN genre g
     ON tg.genre_id = g.genre_id
 JOIN media_type mt
     ON t.media_type_id = mt.media_type_id;
+
+
+CREATE OR REPLACE VIEW vw_customer_playlists AS
+SELECT
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    p.playlist_id,
+    p.playlist_name,
+    p.playlist_visibility,
+    pt.track_position,
+    t.track_id,
+    t.track_name
+FROM customer c
+JOIN playlist p
+    ON c.customer_id = p.customer_id
+JOIN playlist_track pt
+    ON p.playlist_id = pt.playlist_id
+JOIN track t
+    ON pt.track_id = t.track_id;
