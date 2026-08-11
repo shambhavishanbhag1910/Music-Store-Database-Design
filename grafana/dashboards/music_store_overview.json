@@ -1,0 +1,98 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {"type": "postgres", "uid": "music-warehouse"},
+      "fieldConfig": {"defaults": {"unit": "currencyUSD"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+      "id": 1,
+      "options": {"colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto", "wideLayout": true},
+      "targets": [{"format": "table", "rawQuery": true, "rawSql": "SELECT completed_revenue FROM marts.kpi_overview", "refId": "A"}],
+      "title": "Completed Revenue",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "music-warehouse"},
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+      "id": 2,
+      "options": {"colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto", "wideLayout": true},
+      "targets": [{"format": "table", "rawQuery": true, "rawSql": "SELECT completed_orders FROM marts.kpi_overview", "refId": "A"}],
+      "title": "Completed Orders",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "music-warehouse"},
+      "fieldConfig": {"defaults": {"unit": "currencyUSD"}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+      "id": 3,
+      "options": {"colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto", "wideLayout": true},
+      "targets": [{"format": "table", "rawQuery": true, "rawSql": "SELECT average_order_value FROM marts.kpi_overview", "refId": "A"}],
+      "title": "Average Order Value",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "music-warehouse"},
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+      "id": 4,
+      "options": {"colorMode": "value", "graphMode": "none", "justifyMode": "auto", "orientation": "auto", "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "textMode": "auto", "wideLayout": true},
+      "targets": [{"format": "table", "rawQuery": true, "rawSql": "SELECT purchasing_customers FROM marts.kpi_overview", "refId": "A"}],
+      "title": "Purchasing Customers",
+      "type": "stat"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "music-warehouse"},
+      "fieldConfig": {"defaults": {"unit": "currencyUSD"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 14, "x": 0, "y": 4},
+      "id": 5,
+      "options": {"legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true}, "tooltip": {"mode": "single", "sort": "none"}},
+      "targets": [{"format": "time_series", "rawQuery": true, "rawSql": "SELECT full_date AS time, revenue FROM marts.daily_sales WHERE full_date >= CURRENT_DATE - INTERVAL '90 days' ORDER BY full_date", "refId": "A"}],
+      "title": "Daily Revenue - Last 90 Days",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "music-warehouse"},
+      "fieldConfig": {"defaults": {"unit": "currencyUSD"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 10, "x": 14, "y": 4},
+      "id": 6,
+      "options": {"orientation": "horizontal", "showValue": "always", "legend": {"displayMode": "hidden", "placement": "bottom", "showLegend": false}},
+      "targets": [{"format": "table", "rawQuery": true, "rawSql": "SELECT genre_name, revenue FROM marts.genre_performance ORDER BY revenue DESC LIMIT 10", "refId": "A"}],
+      "title": "Top Genres by Revenue",
+      "type": "barchart"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "music-warehouse"},
+      "fieldConfig": {"defaults": {"unit": "currencyUSD"}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 12},
+      "id": 7,
+      "options": {"orientation": "horizontal", "showValue": "always", "legend": {"displayMode": "hidden", "placement": "bottom", "showLegend": false}},
+      "targets": [{"format": "table", "rawQuery": true, "rawSql": "SELECT artist_name, revenue FROM marts.artist_performance ORDER BY revenue DESC LIMIT 10", "refId": "A"}],
+      "title": "Top Artists by Revenue",
+      "type": "barchart"
+    },
+    {
+      "datasource": {"type": "postgres", "uid": "music-warehouse"},
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 12},
+      "id": 8,
+      "options": {"showHeader": true},
+      "targets": [{"format": "table", "rawQuery": true, "rawSql": "SELECT started_at, status, rows_extracted, rows_loaded, ended_at-started_at AS duration FROM audit.etl_run ORDER BY started_at DESC LIMIT 10", "refId": "A"}],
+      "title": "Recent ETL Runs",
+      "type": "table"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 41,
+  "tags": ["music-store", "analytics", "data-engineering"],
+  "templating": {"list": []},
+  "time": {"from": "now-90d", "to": "now"},
+  "timezone": "browser",
+  "title": "Music Store Executive Analytics",
+  "uid": "music-store-overview",
+  "version": 1
+}

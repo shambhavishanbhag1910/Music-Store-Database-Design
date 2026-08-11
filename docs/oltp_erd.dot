@@ -1,0 +1,37 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad=0.2, nodesep=0.35, ranksep=0.6, fontname="Arial"];
+  node [shape=plain, fontname="Arial"];
+  edge [color="#64748b", arrowsize=0.7];
+
+  customer [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dbeafe"><b>customer</b></td></tr><tr><td align="left">PK customer_id</td></tr><tr><td align="left">email UQ</td></tr><tr><td align="left">status</td></tr><tr><td align="left">created_at / updated_at</td></tr></table>>];
+  playlist [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dbeafe"><b>playlist</b></td></tr><tr><td align="left">PK playlist_id</td></tr><tr><td align="left">FK customer_id</td></tr><tr><td align="left">playlist_name</td></tr><tr><td align="left">visibility</td></tr></table>>];
+  playlist_track [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dbeafe"><b>playlist_track</b></td></tr><tr><td align="left">PK/FK playlist_id</td></tr><tr><td align="left">PK/FK track_id</td></tr><tr><td align="left">track_position</td></tr><tr><td align="left">added_at</td></tr></table>>];
+  orders [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dbeafe"><b>orders</b></td></tr><tr><td align="left">PK order_id</td></tr><tr><td align="left">FK customer_id</td></tr><tr><td align="left">order_status</td></tr><tr><td align="left">subtotal / tax / discount / total</td></tr></table>>];
+  order_item [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dbeafe"><b>order_item</b></td></tr><tr><td align="left">PK order_item_id</td></tr><tr><td align="left">FK order_id</td></tr><tr><td align="left">FK track_id nullable</td></tr><tr><td align="left">FK album_id nullable</td></tr><tr><td align="left">line_amount generated</td></tr></table>>];
+  payment [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dbeafe"><b>payment</b></td></tr><tr><td align="left">PK payment_id</td></tr><tr><td align="left">FK order_id</td></tr><tr><td align="left">amount / status / mode</td></tr><tr><td align="left">transaction_reference UQ</td></tr></table>>];
+  artist [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dcfce7"><b>artist</b></td></tr><tr><td align="left">PK artist_id</td></tr><tr><td align="left">artist_name</td></tr><tr><td align="left">country / status</td></tr></table>>];
+  album [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dcfce7"><b>album</b></td></tr><tr><td align="left">PK album_id</td></tr><tr><td align="left">album_title</td></tr><tr><td align="left">album_type / price</td></tr></table>>];
+  album_artist [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dcfce7"><b>album_artist</b></td></tr><tr><td align="left">PK/FK album_id</td></tr><tr><td align="left">PK/FK artist_id</td></tr><tr><td align="left">PK artist_role</td></tr></table>>];
+  track [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dcfce7"><b>track</b></td></tr><tr><td align="left">PK track_id</td></tr><tr><td align="left">FK album_id</td></tr><tr><td align="left">FK media_type_id</td></tr><tr><td align="left">track_name / price</td></tr></table>>];
+  track_artist [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dcfce7"><b>track_artist</b></td></tr><tr><td align="left">PK/FK track_id</td></tr><tr><td align="left">PK/FK artist_id</td></tr><tr><td align="left">PK artist_role</td></tr></table>>];
+  track_genre [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dcfce7"><b>track_genre</b></td></tr><tr><td align="left">PK/FK track_id</td></tr><tr><td align="left">PK/FK genre_id</td></tr></table>>];
+  genre [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dcfce7"><b>genre</b></td></tr><tr><td align="left">PK genre_id</td></tr><tr><td align="left">genre_name UQ</td></tr></table>>];
+  media_type [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#dcfce7"><b>media_type</b></td></tr><tr><td align="left">PK media_type_id</td></tr><tr><td align="left">media_type_name UQ</td></tr></table>>];
+
+  customer -> playlist [label="1:N"];
+  customer -> orders [label="1:N"];
+  playlist -> playlist_track [label="1:N"];
+  track -> playlist_track [label="1:N"];
+  orders -> order_item [label="1:N"];
+  orders -> payment [label="1:N"];
+  track -> order_item [label="0..1:N"];
+  album -> order_item [label="0..1:N"];
+  album -> track [label="1:N"];
+  album -> album_artist [label="1:N"];
+  artist -> album_artist [label="1:N"];
+  track -> track_artist [label="1:N"];
+  artist -> track_artist [label="1:N"];
+  track -> track_genre [label="1:N"];
+  genre -> track_genre [label="1:N"];
+  media_type -> track [label="1:N"];
+}

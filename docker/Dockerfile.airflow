@@ -1,0 +1,10 @@
+FROM apache/airflow:3.3.0
+
+USER airflow
+
+WORKDIR /opt/music_store
+
+COPY --chown=airflow:root pyproject.toml ./pyproject.toml
+COPY --chown=airflow:root src ./src
+
+RUN pip install --no-cache-dir .

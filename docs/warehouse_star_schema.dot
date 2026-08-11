@@ -1,0 +1,25 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad=0.2, nodesep=0.45, ranksep=0.8, fontname="Arial"];
+  node [shape=plain, fontname="Arial"];
+  edge [color="#f97316", arrowsize=0.7];
+
+  dim_date [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#ffedd5"><b>dim_date</b></td></tr><tr><td align="left">PK date_key</td></tr><tr><td align="left">full_date</td></tr><tr><td align="left">month / quarter / year</td></tr></table>>];
+  dim_customer [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#ffedd5"><b>dim_customer (SCD2)</b></td></tr><tr><td align="left">PK customer_key</td></tr><tr><td align="left">NK customer_id</td></tr><tr><td align="left">country / status</td></tr><tr><td align="left">effective_from / effective_to</td></tr><tr><td align="left">is_current / record_hash</td></tr></table>>];
+  dim_product [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#ffedd5"><b>dim_product</b></td></tr><tr><td align="left">PK product_key</td></tr><tr><td align="left">NK product_nk</td></tr><tr><td align="left">track / album</td></tr><tr><td align="left">artist / genre / media type</td></tr></table>>];
+  fact_sales [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#fed7aa"><b>fact_sales</b></td></tr><tr><td align="left">PK order_item_id</td></tr><tr><td align="left">FK customer_key</td></tr><tr><td align="left">FK product_key</td></tr><tr><td align="left">FK order_date_key</td></tr><tr><td align="left">gross / discount / tax / net</td></tr></table>>];
+  fact_payment [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#fed7aa"><b>fact_payment</b></td></tr><tr><td align="left">PK payment_id</td></tr><tr><td align="left">FK customer_key</td></tr><tr><td align="left">FK payment_date_key</td></tr><tr><td align="left">amount / status / mode</td></tr></table>>];
+  fact_playlist [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#fed7aa"><b>fact_playlist_activity</b></td></tr><tr><td align="left">PK playlist_id + track_id</td></tr><tr><td align="left">FK customer_key</td></tr><tr><td align="left">FK product_key</td></tr><tr><td align="left">FK added_date_key</td></tr></table>>];
+  dim_artist [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#ffedd5"><b>dim_artist</b></td></tr><tr><td align="left">PK artist_key</td></tr><tr><td align="left">NK artist_id</td></tr></table>>];
+  dim_genre [label=<<table border="1" cellborder="0" cellspacing="0" cellpadding="5"><tr><td bgcolor="#ffedd5"><b>dim_genre</b></td></tr><tr><td align="left">PK genre_key</td></tr><tr><td align="left">NK genre_id</td></tr></table>>];
+
+  dim_customer -> fact_sales;
+  dim_product -> fact_sales;
+  dim_date -> fact_sales;
+  dim_customer -> fact_payment;
+  dim_date -> fact_payment;
+  dim_customer -> fact_playlist;
+  dim_product -> fact_playlist;
+  dim_date -> fact_playlist;
+  dim_artist -> dim_product [style=dashed, label="reference"];
+  dim_genre -> dim_product [style=dashed, label="reference"];
+}

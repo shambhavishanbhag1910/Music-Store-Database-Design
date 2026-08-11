@@ -1,0 +1,26 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad=0.3, nodesep=0.4, ranksep=0.8, fontname="Arial"];
+  node [shape=box, style="rounded,filled", fontname="Arial", margin="0.18,0.10"];
+  edge [color="#475569", arrowsize=0.8];
+
+  oltp [label="PostgreSQL OLTP\nNormalized transactions", fillcolor="#dbeafe"];
+  extract [label="Incremental Extract\nWatermark + overlap", fillcolor="#e0f2fe"];
+  raw [label="Raw Staging\nJSONB + batch_id", fillcolor="#fef3c7"];
+  transform [label="Python Transform\nSCD2 + allocations", fillcolor="#ede9fe"];
+  dq [label="Data Quality Gate\nAudit + rollback", fillcolor="#fee2e2"];
+  wh [label="Dimensional Warehouse\nDims + facts", fillcolor="#ffedd5"];
+  marts [label="Analytics Marts\nKPI / sales / customer / product", fillcolor="#dcfce7"];
+  grafana [label="Grafana\nDashboard as code", fillcolor="#ccfbf1"];
+  ml [label="ML-ready Analytics\nRFM / affinity / CLV", fillcolor="#f3e8ff"];
+  airflow [label="Airflow 3\nSchedule + retries + logs", fillcolor="#cffafe"];
+  audit [label="Audit & Metrics\nRuns / watermarks / DQ", fillcolor="#f1f5f9"];
+
+  oltp -> extract -> raw -> transform -> dq -> wh -> marts;
+  marts -> grafana;
+  marts -> ml;
+  airflow -> extract [style=dashed];
+  airflow -> transform [style=dashed];
+  dq -> audit [style=dashed];
+  extract -> audit [style=dashed];
+  audit -> grafana [style=dashed];
+}
